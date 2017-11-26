@@ -1,9 +1,5 @@
 #!/bin/sh
-docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-if [ "$TRAVIS_BRANCH" = "master" ]; then
-    TAG="latest"
-else
-    TAG="$TRAVIS_BRANCH"
-fi
-docker build -f Dockerfile -t $TRAVIS_REPO_SLUG:$TAG .
-docker push $TRAVIS_REPO_SLUG
+wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+heroku plugins:install heroku-container-registry
+docker login -e _ -u _ --password=$HEROKU_API_KEY registry.heroku.com
+heroku container:push web --app $HEROKU_APP_NAME
